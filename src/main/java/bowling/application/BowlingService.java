@@ -1,16 +1,20 @@
 package bowling.application;
 
 import bowling.domain.frame.Frames;
-import bowling.domain.pin.Pins;
+import bowling.domain.pin.FallenPins;
+import bowling.domain.player.Player;
+import bowling.dto.BowlingRequest;
+import bowling.dto.BowlingResponse;
 
 public class BowlingService {
-    private Frames frames;
+    private final Frames frames;
 
     public BowlingService() {
         frames = Frames.init();
     }
 
-    public Frames play(Pins pins) {
-        return frames.bowl(pins);
+    public BowlingResponse play(BowlingRequest request) {
+        Frames frames = this.frames.bowl(new FallenPins(request.getFallenPin()));
+        return new BowlingResponse(frames, new Player(request.getPlayerName()));
     }
 }

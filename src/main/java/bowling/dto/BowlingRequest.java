@@ -1,7 +1,5 @@
 package bowling.dto;
 
-import bowling.domain.pin.FallenPins;
-import bowling.domain.pin.Pins;
 import bowling.domain.player.Player;
 
 public class BowlingRequest {
@@ -13,11 +11,15 @@ public class BowlingRequest {
         this.playerName = playerName;
     }
 
-    public Pins toPins() {
-        return new FallenPins(fallenPin);
-    }
-
     public Player toPlayer() {
         return new Player(playerName);
+    }
+
+    public int getFallenPin() {
+        return fallenPin;
+    }
+
+    public String getPlayerName() {
+        return playerName;
     }
 }
