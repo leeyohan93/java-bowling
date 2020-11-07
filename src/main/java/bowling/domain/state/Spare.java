@@ -3,7 +3,7 @@ package bowling.domain.state;
 import static bowling.domain.pin.Pins.PIN_COUNT;
 
 public class Spare extends Finished {
-    private static final String SPARE = "%s|/";
+    private static final String PRINT_FORM = "%s|/";
     private final int firstFallenPinCount;
 
     public Spare(final int firstFallenPinCount) {
@@ -23,7 +23,7 @@ public class Spare extends Finished {
 
     @Override
     public String print() {
-        String spareFormat = String.format(SPARE, firstFallenPinCount);
+        String spareFormat = String.format(PRINT_FORM, firstFallenPinCount);
         return convertGutter(spareFormat);
     }
 

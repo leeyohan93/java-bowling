@@ -5,7 +5,7 @@ import bowling.domain.pin.Pins;
 import static bowling.domain.pin.Pins.PIN_COUNT;
 
 public class Trying implements State {
-    private static final String TRYING = "%s";
+    private static final String PRINT_FORM = "%s";
     private static final int GUTTER_NUMBER = 0;
     private static final String GUTTER_SYMBOL = "-";
     private final int firstFallen;
@@ -42,8 +42,8 @@ public class Trying implements State {
     @Override
     public String print() {
         if (firstFallen == GUTTER_NUMBER) {
-            return String.format(TRYING, GUTTER_SYMBOL);
+            return String.format(PRINT_FORM, GUTTER_SYMBOL);
         }
-        return String.format(TRYING, firstFallen);
+        return String.format(PRINT_FORM, firstFallen);
     }
 }

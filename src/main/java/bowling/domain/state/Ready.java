@@ -5,7 +5,7 @@ import bowling.domain.pin.Pins;
 import static bowling.domain.pin.Pins.PIN_COUNT;
 
 public class Ready implements State {
-    private static final String READY = "";
+    private static final String PRINT_FORM = "";
 
     @Override
     public boolean isFinish() {
@@ -23,6 +23,6 @@ public class Ready implements State {
 
     @Override
     public String print() {
-        return READY;
+        return PRINT_FORM;
     }
 }

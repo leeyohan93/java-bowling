@@ -2,14 +2,18 @@ package bowling.domain.state;
 
 import bowling.domain.pin.Pins;
 
+import static bowling.domain.state.Strike.STRIKE_PIN_COUNT;
+
 public class Bonus implements State {
-    public static final int DEFAULT_COUNT = 1;
+    private static final String PRINT_FORM = "%s|%s";
+    private static final int DEFAULT_LEFT = 1;
+    private static final int DEFAULT_PIN = 0;
     private final State preState;
     private final int leftCount;
     private final int fallenPinCount;
 
     public static Bonus start(final State preState) {
-        return new Bonus(preState, DEFAULT_COUNT, 0);
+        return new Bonus(preState, DEFAULT_LEFT, DEFAULT_PIN);
     }
 
     private Bonus(final State preState, final int leftCount, final int fallenPinCount) {
@@ -32,9 +36,9 @@ public class Bonus implements State {
             throw new IllegalStateException("프레임이 완료되어 볼을 던질 수 없습니다.");
         }
 
-        if (pins.count() == 10 && (preState instanceof Strike)) {
+        if (pins.count() == STRIKE_PIN_COUNT && (preState instanceof Strike)) {
             Bonus bonus = new Bonus(preState, leftCount - 1, pins.count());
-            return new Bonus(bonus, DEFAULT_COUNT, 0);
+            return new Bonus(bonus, DEFAULT_LEFT, DEFAULT_PIN);
         }
 
         return new Bonus(preState, leftCount - 1, pins.count());
@@ -46,14 +50,14 @@ public class Bonus implements State {
             return preState.print();
         }
 
-        if (fallenPinCount == 10) {
-            return preState.print() + "|X";
+        if (fallenPinCount == Strike.STRIKE_PIN_COUNT) {
+            return String.format(PRINT_FORM, preState.print(), Strike.SYMBOL);
         }
 
-        if (fallenPinCount == 0) {
-            return preState.print() + "|-";
+        if (fallenPinCount == Miss.GUTTER_PIN_COUNT) {
+            return String.format(PRINT_FORM, preState.print(), Miss.GUTTER_SYMBOL);
         }
 
-        return preState.print() + "|" + fallenPinCount;
+        return String.format(PRINT_FORM, preState.print(), fallenPinCount);
     }
 }
