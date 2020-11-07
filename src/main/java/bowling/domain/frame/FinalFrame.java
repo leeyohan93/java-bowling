@@ -6,19 +6,14 @@ import bowling.domain.state.*;
 import java.util.Objects;
 
 public class FinalFrame implements Frame {
-    private static final String FRAME = "%-3s";
-    private final int frameNumber;
+    public static final int FINAL_FRAME_NUMBER = 10;
     private final State state;
 
     public static FinalFrame init() {
-        return new FinalFrame(10, new Ready());
+        return new FinalFrame(new Ready());
     }
 
-    public FinalFrame(final int frameNumber, final State state) {
-        if (frameNumber != 10) {
-            throw new IllegalArgumentException("마지막 프레임 넘버는 10 입니다.");
-        }
-        this.frameNumber = frameNumber;
+    public FinalFrame(final State state) {
         this.state = state;
     }
 
@@ -30,14 +25,14 @@ public class FinalFrame implements Frame {
     @Override
     public Frame bowl(final Pins pins) {
         if (isFinished()) {
-            throw new IllegalStateException(String.format("이미 완료된 %d 프레임 입니다.", frameNumber));
+            throw new IllegalStateException("이미 완료된 프레임 입니다.");
         }
 
         State result = state.bowl(pins);
         if (result instanceof Strike || result instanceof Spare) {
-            return new FinalFrame(frameNumber, Bonus.start(result));
+            return new FinalFrame(Bonus.start(result));
         }
-        return new FinalFrame(frameNumber, result);
+        return new FinalFrame(result);
     }
 
     @Override
@@ -47,7 +42,7 @@ public class FinalFrame implements Frame {
 
     @Override
     public int number() {
-        return frameNumber;
+        return FINAL_FRAME_NUMBER;
     }
 
     @Override
@@ -60,11 +55,11 @@ public class FinalFrame implements Frame {
         if (this == o) return true;
         if (!(o instanceof FinalFrame)) return false;
         final FinalFrame that = (FinalFrame) o;
-        return frameNumber == that.frameNumber;
+        return Objects.equals(state, that.state);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(frameNumber);
+        return Objects.hash(state);
     }
 }

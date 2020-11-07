@@ -61,7 +61,7 @@ class FramesTest {
     }
 
     private Frames mockFinishedFinalFrame() {
-        return new Frames(Collections.singletonList(new FinalFrame(10, new Finished() {
+        return new Frames(Collections.singletonList(new FinalFrame(new Finished() {
             @Override
             public String print() {
                 return null;

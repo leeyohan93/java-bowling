@@ -2,6 +2,7 @@ package bowling.domain.frame;
 
 import bowling.domain.state.Finished;
 import bowling.domain.state.Ready;
+import bowling.domain.state.Strike;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,17 +25,17 @@ class FinalFrameTest {
     }
 
     @Test
-    @DisplayName("FinalFrame frameNumber(10만 허용) 예외 처리")
+    @DisplayName("FinalFrame 프레임 번호는 State에 관계 없이 항상 10")
     void frameNumberException() {
         assertThat(finalFrame).isInstanceOf(Frame.class);
-        assertThrows(IllegalArgumentException.class, () -> new FinalFrame(0, new Ready()));
-        assertThrows(IllegalArgumentException.class, () -> new FinalFrame(9, new Ready()));
+        assertThat(new FinalFrame(new Ready()).number()).isEqualTo(10);
+        assertThat(new FinalFrame(new Strike()).number()).isEqualTo(10);
     }
 
     @Test
     @DisplayName("FinalFrame 프레임의 종료 여부 = 볼을 굴릴 수 있느냐")
     void isFinished() {
-        FinalFrame finishedFrame = new FinalFrame(10, new Finished() {
+        FinalFrame finishedFrame = new FinalFrame(new Finished() {
             @Override
             public String print() {
                 return "";
@@ -76,7 +77,7 @@ class FinalFrameTest {
     @Test
     @DisplayName("완료된 프레임에 볼을 굴릴 경우 예외 발생")
     void bowlException() {
-        FinalFrame finishedFrame = new FinalFrame(10, new Finished() {
+        FinalFrame finishedFrame = new FinalFrame( new Finished() {
             @Override
             public String print() {
                 return "";
