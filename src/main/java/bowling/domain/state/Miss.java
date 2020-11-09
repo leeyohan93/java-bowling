@@ -1,6 +1,6 @@
 package bowling.domain.state;
 
-import static bowling.domain.pin.Pins.PIN_COUNT;
+import bowling.domain.pin.Pins;
 
 public class Miss extends Finished {
     private static final String PRINT_FORM = "%s|%s";
@@ -9,22 +9,13 @@ public class Miss extends Finished {
     private final int firstFallenPinCount;
     private final int secondFallenPinCount;
 
-    public Miss(final int firstFallenPinCount, final int secondFallenPinCount) {
-        validate(firstFallenPinCount, secondFallenPinCount);
-        this.firstFallenPinCount = firstFallenPinCount;
-        this.secondFallenPinCount = secondFallenPinCount;
+    public static State of(final Pins firstFallenPins, final Pins secondFallenPins) {
+        return new Miss(firstFallenPins.count(), secondFallenPins.count());
     }
 
-    private void validate(final int firstFallenPinCount, final int secondFallenPinCount) {
-        if (firstFallenPinCount < 0 || secondFallenPinCount < 0) {
-            throw new IllegalArgumentException(
-                    String.format("쓰러뜨린 핀이 음수 값일 수 없습니다. %d %d", firstFallenPinCount, secondFallenPinCount));
-        }
-
-        if (firstFallenPinCount + secondFallenPinCount > PIN_COUNT) {
-            throw new IllegalArgumentException(
-                    String.format("쓰러뜨린 핀이 최대 핀 개수를 초과하였습니다. %d %d", firstFallenPinCount, secondFallenPinCount));
-        }
+    private Miss(final int firstFallenPinCount, final int secondFallenPinCount) {
+        this.firstFallenPinCount = firstFallenPinCount;
+        this.secondFallenPinCount = secondFallenPinCount;
     }
 
     @Override

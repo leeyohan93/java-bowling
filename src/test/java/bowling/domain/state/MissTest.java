@@ -14,17 +14,17 @@ class MissTest {
 
     @BeforeEach
     void setUp() {
-        miss = new Miss(5, 4);
+        miss = Miss.of(() -> 5, () -> 4);
     }
 
     @Test
     @DisplayName("쓰러뜨린 핀 수는 0 이상 이며 두 횟수의 합은 10 이하여야 한다.")
     void init() {
-        assertThat(new Miss(0, 5)).isNotNull();
-        assertThat(new Miss(2, 8)).isNotNull();
+        assertThat(Miss.of(() -> 0, () -> 5)).isNotNull();
+        assertThat(Miss.of(() -> 2, () -> 8)).isNotNull();
 
-        assertThrows(IllegalArgumentException.class, () -> new Miss(-1, 5));
-        assertThrows(IllegalArgumentException.class, () -> new Miss(0, 11));
+        assertThrows(IllegalArgumentException.class, () -> Miss.of(() -> -1, () -> 5));
+        assertThrows(IllegalArgumentException.class, () -> Miss.of(() -> 0, () -> 11));
     }
 
     @Test
@@ -36,14 +36,14 @@ class MissTest {
     @Test
     @DisplayName("Miss 상태에서는 공을 굴리려 하면 예외가 발생한다.")
     void bowlException() {
-        assertThrows(IllegalStateException.class, () -> miss.bowl(()->5));
+        assertThrows(IllegalStateException.class, () -> miss.bowl(() -> 5));
     }
 
     @ParameterizedTest
     @DisplayName("Miss 상태를 출력하면 {첫번째 투구 결과}|{두번째 투구 결과} 가 출력된다.")
     @CsvSource(value = {"5,3,5|3", "0,0,-|-", "9,0,9|-"})
     void print(int firstFallenPinCount, int secondFallenPinCount, String expected) {
-        Miss miss = new Miss(firstFallenPinCount, secondFallenPinCount);
+        State miss = Miss.of(() -> firstFallenPinCount, () -> secondFallenPinCount);
         assertThat(miss.print()).isEqualTo(expected);
     }
 }

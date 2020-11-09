@@ -1,33 +1,30 @@
 package bowling.domain.state;
 
-import static bowling.domain.pin.Pins.PIN_COUNT;
+import bowling.domain.pin.Pins;
+
+import static bowling.domain.state.Miss.GUTTER_PIN_COUNT;
+import static bowling.domain.state.Miss.GUTTER_SYMBOL;
 
 public class Spare extends Finished {
-    private static final String PRINT_FORM = "%s|/";
+    public static final String SYMBOL = "/";
+    private static final String PRINT_FORM = "%s|%s";
     private final int firstFallenPinCount;
 
-    public Spare(final int firstFallenPinCount) {
-        validate(firstFallenPinCount);
-        this.firstFallenPinCount = firstFallenPinCount;
+    public static Spare from(final Pins firstFallenPins) {
+        return new Spare(firstFallenPins.count());
     }
 
-    private void validate(final int firstFallenPinCount) {
-        if (firstFallenPinCount < 0) {
-            throw new IllegalArgumentException(String.format("쓰러뜨린 핀이 음수 값일 수 없습니다. %d", firstFallenPinCount));
-        }
-
-        if (firstFallenPinCount >= PIN_COUNT) {
-            throw new IllegalArgumentException(String.format("쓰러뜨린 핀이 최대 핀 개수를 초과하였습니다. %d", firstFallenPinCount));
-        }
+    public Spare(final int firstFallenPinCount) {
+        this.firstFallenPinCount = firstFallenPinCount;
     }
 
     @Override
     public String print() {
-        String spareFormat = String.format(PRINT_FORM, firstFallenPinCount);
+        String spareFormat = String.format(PRINT_FORM, firstFallenPinCount, SYMBOL);
         return convertGutter(spareFormat);
     }
 
     private String convertGutter(final String spareFormat) {
-        return spareFormat.replaceAll("0", "-");
+        return spareFormat.replaceAll(String.valueOf(GUTTER_PIN_COUNT), GUTTER_SYMBOL);
     }
 }
