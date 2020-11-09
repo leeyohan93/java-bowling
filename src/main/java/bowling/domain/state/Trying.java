@@ -10,19 +10,12 @@ public class Trying implements State {
     private static final String GUTTER_SYMBOL = "-";
     private final int firstFallen;
 
-    public Trying(final int firstFallen) {
-        validate(firstFallen);
-        this.firstFallen = firstFallen;
+    public static Trying from(final Pins fallenPins) {
+        return new Trying(fallenPins.count());
     }
 
-    private void validate(final int firstFallenPinCount) {
-        if (firstFallenPinCount < 0) {
-            throw new IllegalArgumentException(String.format("쓰러뜨린 핀이 음수 값일 수 없습니다. %d", firstFallenPinCount));
-        }
-
-        if (firstFallenPinCount >= PIN_COUNT) {
-            throw new IllegalArgumentException(String.format("쓰러뜨린 핀이 최대 핀 개수를 초과하였습니다. %d", firstFallenPinCount));
-        }
+    private Trying(final int firstFallen) {
+        this.firstFallen = firstFallen;
     }
 
     @Override

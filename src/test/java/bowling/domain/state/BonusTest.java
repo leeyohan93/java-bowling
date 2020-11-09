@@ -22,7 +22,7 @@ class BonusTest {
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            Bonus.start(new Trying(7));
+            Bonus.start(Trying.from(() -> 7));
         });
     }
 

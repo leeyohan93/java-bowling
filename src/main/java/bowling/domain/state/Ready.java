@@ -2,7 +2,7 @@ package bowling.domain.state;
 
 import bowling.domain.pin.Pins;
 
-import static bowling.domain.pin.Pins.PIN_COUNT;
+import static bowling.domain.state.Strike.STRIKE_PIN_COUNT;
 
 public class Ready implements State {
     private static final String PRINT_FORM = "";
@@ -13,12 +13,12 @@ public class Ready implements State {
     }
 
     @Override
-    public State bowl(final Pins pins) {
-        int fallenPinCount = pins.count();
-        if (fallenPinCount == PIN_COUNT) {
+    public State bowl(final Pins fallenPins) {
+        int fallenPinCount = fallenPins.count();
+        if (fallenPinCount == STRIKE_PIN_COUNT) {
             return new Strike();
         }
-        return new Trying(fallenPinCount);
+        return Trying.from(fallenPins);
     }
 
     @Override
