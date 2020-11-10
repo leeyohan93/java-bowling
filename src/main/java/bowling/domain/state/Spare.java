@@ -2,6 +2,8 @@ package bowling.domain.state;
 
 import bowling.domain.pin.Pins;
 
+import java.util.Objects;
+
 import static bowling.domain.state.Miss.GUTTER_PIN_COUNT;
 import static bowling.domain.state.Miss.GUTTER_SYMBOL;
 
@@ -26,5 +28,18 @@ public class Spare extends Finished {
 
     private String convertGutter(final String spareFormat) {
         return spareFormat.replaceAll(String.valueOf(GUTTER_PIN_COUNT), GUTTER_SYMBOL);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Spare)) return false;
+        final Spare spare = (Spare) o;
+        return firstFallenPinCount == spare.firstFallenPinCount;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstFallenPinCount);
     }
 }

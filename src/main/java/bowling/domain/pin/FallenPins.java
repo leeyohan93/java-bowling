@@ -1,5 +1,7 @@
 package bowling.domain.pin;
 
+import java.util.Objects;
+
 public class FallenPins implements Pins {
     private final int fallen;
 
@@ -13,5 +15,18 @@ public class FallenPins implements Pins {
     @Override
     public int count() {
         return fallen;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FallenPins)) return false;
+        final FallenPins that = (FallenPins) o;
+        return fallen == that.fallen;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fallen);
     }
 }

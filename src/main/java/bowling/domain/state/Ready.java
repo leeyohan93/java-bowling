@@ -25,4 +25,14 @@ public class Ready implements State {
     public String print() {
         return PRINT_FORM;
     }
+
+    @Override
+    public boolean equals(final Object obj) {
+        return obj instanceof Ready;
+    }
+
+    @Override
+    public int hashCode() {
+        return Ready.class.hashCode();
+    }
 }

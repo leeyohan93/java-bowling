@@ -1,11 +1,12 @@
 package bowling.domain.frame;
 
-import bowling.domain.state.Finished;
-import bowling.domain.state.Ready;
+import bowling.domain.pin.FallenPins;
+import bowling.domain.state.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,9 +49,42 @@ class NormalFrameTest {
         assertThat(finishedFrame.isFinished()).isTrue();
     }
 
+    @ParameterizedTest
+    @DisplayName("NormalFrame Trying")
+    @ValueSource(ints = {0, 1, 5})
+    void trying(int pinCount) {
+        Frame target = normalFrame.bowl(new FallenPins(pinCount));
+        NormalFrame expectedFrame = new NormalFrame(normalFrame.number(), new Trying(new FallenPins(pinCount)));
+        assertThat(target.equals(expectedFrame)).isTrue();
+    }
+
     @Test
-    @DisplayName("NormalFrame bowl & print")
-    void bowlAndPrint() {
+    @DisplayName("NormalFrame 스트라이크")
+    void strike() {
+        assertThat(normalFrame.bowl(new FallenPins(10))).isEqualTo(new NormalFrame(normalFrame.number(), new Strike()));
+    }
+
+    @ParameterizedTest
+    @DisplayName("NormalFrame 미스")
+    @CsvSource(value = {"0,0", "9,0", "1,5", "5,4"})
+    void miss(int firstPinCount, int secondPinCount) {
+        Frame target = normalFrame.bowl(new FallenPins(firstPinCount)).bowl(new FallenPins(secondPinCount));
+        NormalFrame expectedFrame = new NormalFrame(normalFrame.number(),
+                Miss.of(new FallenPins(firstPinCount), new FallenPins(secondPinCount)));
+        assertThat(target.equals(expectedFrame)).isTrue();
+    }
+
+    @Test
+    @DisplayName("NormalFrame 스페어")
+    void spare() {
+        Frame target = normalFrame.bowl(new FallenPins(1)).bowl(new FallenPins(9));
+        NormalFrame expectedFrame = new NormalFrame(normalFrame.number(), new Spare(1));
+        assertThat(target).isEqualTo(expectedFrame);
+    }
+
+    @Test
+    @DisplayName("NormalFrame print")
+    void print() {
         assertThat(normalFrame.bowl(() -> 0).print().trim()).isEqualTo("-");                // Gutter
         assertThat(normalFrame.bowl(() -> 10).print().trim()).isEqualTo("X");               // Strike
         assertThat(normalFrame.bowl(() -> 5).print().trim()).isEqualTo("5");                // Trying

@@ -2,6 +2,8 @@ package bowling.domain.state;
 
 import bowling.domain.pin.Pins;
 
+import java.util.Objects;
+
 import static bowling.domain.state.Strike.STRIKE_PIN_COUNT;
 
 public class Bonus implements State {
@@ -16,7 +18,7 @@ public class Bonus implements State {
         return new Bonus(preState, DEFAULT_LEFT, DEFAULT_PIN);
     }
 
-    private Bonus(final State preState, final int leftCount, final int fallenPinCount) {
+    public Bonus(final State preState, final int leftCount, final int fallenPinCount) {
         if (!(preState instanceof Strike) && !(preState instanceof Spare) && !(preState instanceof Bonus)) {
             throw new IllegalArgumentException("Bonus는 스트라이크나 스페어일때만 가능합니다.");
         }
@@ -59,5 +61,20 @@ public class Bonus implements State {
         }
 
         return String.format(PRINT_FORM, preState.print(), fallenPinCount);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Bonus)) return false;
+        final Bonus bonus = (Bonus) o;
+        return leftCount == bonus.leftCount &&
+                fallenPinCount == bonus.fallenPinCount &&
+                Objects.equals(preState, bonus.preState);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(preState, leftCount, fallenPinCount);
     }
 }

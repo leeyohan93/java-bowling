@@ -44,19 +44,6 @@ public class NormalFrame implements Frame {
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (!(o instanceof NormalFrame)) return false;
-        final NormalFrame that = (NormalFrame) o;
-        return frameNumber == that.frameNumber;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(frameNumber);
-    }
-
-    @Override
     public int number() {
         return frameNumber;
     }
@@ -71,5 +58,19 @@ public class NormalFrame implements Frame {
             return FinalFrame.init();
         }
         return new NormalFrame(frameNumber + 1, new Ready());
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NormalFrame)) return false;
+        final NormalFrame that = (NormalFrame) o;
+        return frameNumber == that.frameNumber &&
+                Objects.equals(state, that.state);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(frameNumber, state);
     }
 }
