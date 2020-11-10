@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TryingTest {
     private State trying;
@@ -32,6 +33,12 @@ class TryingTest {
     void bowlMiss() {
         State miss = trying.bowl(() -> 2);
         assertThat(miss).isInstanceOf(Miss.class);
+    }
+
+    @Test
+    @DisplayName("넘어뜨린 핀이 10개를 넘을 경우 예외 발생")
+    void exceptBowl() {
+        assertThrows(IllegalArgumentException.class, () -> trying.bowl(() -> 5).bowl(() -> 8));
     }
 
     @Test

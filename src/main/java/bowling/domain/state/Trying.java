@@ -27,6 +27,10 @@ public class Trying implements State {
 
     @Override
     public State bowl(final Pins secondFallenPins) {
+        if (secondFallenPins.count() > PIN_COUNT - firstFallenPins.count()) {
+            throw new IllegalArgumentException("쓰러뜨릴 수 있는 Pin 숫자를 초과하였습니다.");
+        }
+
         if (firstFallenPins.count() + secondFallenPins.count() == PIN_COUNT) {
             return Spare.from(firstFallenPins);
         }
